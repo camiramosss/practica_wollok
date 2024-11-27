@@ -1,5 +1,4 @@
-import example.pepita
-
+import example.*
 describe "group of tests for pepita" {
 
   test "pepita has initial energy" {
@@ -7,3 +6,89 @@ describe "group of tests for pepita" {
   }
 
 }
+
+//test practica superheroes
+/*
+describe "Tests de transportes y heroes" {
+
+  test "ernesto tiene energia inicial" {
+    assert.that(ernesto.energia()!=0)
+  }
+
+  test "ernesto come alfajor y su energia aumenta un 10%" {
+    ernesto.comerAlfajor()
+    assert.equals(55, ernesto.energia())
+  }
+
+  test "el 160 no puede despegar nunca" {
+    assert.notThat(colectivo160.puedeDespegar())
+  }
+
+  test "la mision evitar choque puede ser cumplida por un heroe con suficiente energia" {
+    assert.that(misionEvitarChoque.puedeCumplir(uma))
+  }
+
+
+test "Ernesto no puede volar" {
+    assert.notThat(ernesto.puedeVolar())
+  }
+
+test "Uma puede volar si su medio de transporte puede volar" {
+    uma.transporte(helicoptero)
+    assert.that(uma.puedeVolar())
+  }
+
+test "la energía de Uma siempre es 500" {
+    assert.equals(500, uma.energia())
+  }
+
+test "el helicóptero puede volar si su tanque tiene más de 10 litros de combustible" {
+    assert.that(helicoptero.puedeDespegar())
+  }
+
+test "el helicóptero no puede volar si su tanque tiene menos de 10 litros de combustible" {
+    helicoptero.combustible(5)
+    assert.notThat(helicoptero.puedeDespegar())
+  }
+
+test "la misión evitar choque no puede ser cumplida por un héroe que tiene energía insuficiente" {
+    assert.that(misionEvitarChoque.puedeCumplir(uma))
+  }
+
+test "la misión aerea puede ser cumplida por un héroe que vuele" {
+    uma.transporte(helicoptero)
+    assert.that(misionSalvarAvion.puedeCumplir(uma))
+  }
+
+test "la misión aerea no puede ser cumplida por un héroe que no vuele" {
+    assert.notThat(misionSalvarAvion.puedeCumplir(ernesto))
+  }
+
+test "Cuando Aurora hace una cirugía su energía disminuye 5 unidades" {
+    aurora.hacerCirugia()
+    assert.equals(195, aurora.energia())
+  }
+}
+*/
+
+//tests entradas de cine
+/*
+describe "test sobre practica entradas de cine" {
+salaNumerada.cambiarSistemaDeSonido(estandar)
+salaNoNumerada.cambiarSistemaDeSonido(dolbySuperSarraun)
+  
+test "el valor de una entrada para la sala no numerada(con sistema dolby) con 0 asientos no supera los 10000"{
+  salaNoNumerada.cambiarAsientos(0)
+  assert.equals(salaNoNumerada.valorEntrada(), 10000)
+  }
+
+test "el valor de una entrada para la sala no numerada(con sistema dolby) con 100 asientos es 9900"{
+  salaNoNumerada.asientos(100)
+  assert.equals(salaNoNumerada.valorEntrada(), 9900)
+}
+
+test "el valor de una entrada para la sala numerada(con sistema estandar) es de 8000 "{
+  assert.equals(salaNumerada.valorEntrada(), 8000)
+}
+}
+*/

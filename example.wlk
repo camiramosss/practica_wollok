@@ -142,6 +142,7 @@ class Alquiler inherits Descarga{
 
 //////////////////////////////////////////////////////PRACTICA COMPUTADORAS//////////////////////////////////////////////////////
 
+/*
 //SUPERCOMPUTADORAS
 class Supercomputadora {
   const equipos = []
@@ -256,8 +257,156 @@ class APruebaDeFallos inherits AhorroDeEnergia{
     if(problemasResueltos == 100) throw new DomainException (message = "falla de monitoreo")
   }
 }
+*/
 
 
+
+//////////////////////////////////////////////////////PRACTICA SUPERHEROES//////////////////////////////////////////////////////
+/*
+// Punto 1
+object ernesto {
+  var energia = 50
+
+  method comerAlfajor() {
+    energia += energia * 0.1
+  }
+  method energia() = energia
+  method puedeVolar() = false
+}
+
+// Punto 2
+object uma {
+  var property transporte = helicoptero
+ 
+  method energia() = 500
+
+  method puedeVolar() = transporte.puedeDespegar()
+}
+
+object helicoptero {
+  var combustible = 100
+
+  method combustible(cantidad) {
+    combustible = cantidad
+  }
+
+  method puedeDespegar() = combustible > 10
+}
+
+object colectivo160 {
+  method puedeDespegar() = false
+}
+
+// Punto 3
+object misionEvitarChoque {
+  method puedeCumplir(heroe) = heroe.energia() > 100
+}
+
+object misionSalvarAvion {
+  method puedeCumplir(heroe) = heroe.puedeVolar()
+}
+
+// Punto 4
+object aurora {
+  var cirugiasDelDia = 0
+  
+  method energia() = 200 - (cirugiasDelDia * 5)
+  
+  method puedeVolar() = cirugiasDelDia > 2
+  
+  method hacerCirugia() {
+    cirugiasDelDia += 1
+  }
+
+  method pasarDia() { cirugiasDelDia = 0 }
+}
+*/
+
+
+//////////////////////////////////////////////////////PRACTICA ENTRADAS DE CINE//////////////////////////////////////////////////////
+/*
+object salaNoNumerada {
+  var property asientos = 2
+  var property sistemaDeSonido = dolbySuperSarraun
+  var property entradaBase = 9000
+
+method cambiarAsientos(n){
+  asientos = n
+}
+
+method cambiarSistemaDeSonido(sistema){
+  sistemaDeSonido = sistema
+}
+
+method valorEntrada () = (entradaBase + sistemaDeSonido.adicionalSegunSistema(self) - asientos).min(10000)
+}
+
+object salaNumerada {
+  const property asientos = 240
+  var property sistemaDeSonido = estandar
+  var property entradaBase = 8000
+
+method cambiarSistemaDeSonido(sistema){
+  sistemaDeSonido = sistema
+}
+
+method valorEntrada () = entradaBase + sistemaDeSonido.adicionalSegunSistema(self)
+}
+
+//sistemas de sonido y adicionales segun sistema
+object dolbySuperSarraun {
+  method adicionalSegunSistema(sala) =
+  if(sala.asientos() < 150) 1000
+  else 2000
+}
+
+object qwert360XWF {
+  method adicionalSegunSistema(sala) = sala.asientos() * 13
+}
+
+object estandar {
+  method adicionalSegunSistema(sala) = 0
+}
+*/
+
+
+//////////////////////////////////////////////////////PRACTICA TIERRA MEDIA//////////////////////////////////////////////////////
+/////////////PRIMERA PARTE
+object gandalf{
+  var property vida = 100
+  const armas = [baculo, espadaGlamdring]
+
+method cambiarVida(n) {
+  vida = n.min(100)
+}
+
+method poder() = vida + armas.sum({arma => arma.poder()})
+
+}
+
+//armas
+object baculo{
+ var property poder = 400
+}
+
+object espadaGlamdring{
+var property origen = elfico
+method poder() = 10 * self.origen().valor()
+
+}
+
+//origenes
+object elfico{
+  var property valor = 25
+}
+
+object enano{
+  var property valor = 25
+}
+
+object humano{
+  var property valor = 15
+}
 
 
 
