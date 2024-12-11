@@ -92,3 +92,20 @@ test "el valor de una entrada para la sala numerada(con sistema estandar) es de 
 }
 }
 */
+
+/*
+describe "group of tests for Wollok Game Worlds" {
+
+  test "josedeodo con 0 cansancio le gana a faker tilteado" {
+    const partida1 = new Partida(jugadores = [josedeodo,faker])
+    assert.equals(partida1.ganador(), josedeodo)
+  }
+
+  test "equipo con "{
+    const equipo1 = new Equipo(jugadores = [faker,josedeodo])
+    const equipo2 = new Equipo(jugadores = [josedeodo, caps])
+    const partida2 = new Partida(jugadores = [equipo1,equipo2])
+    assert.equals(partida2.ganador(), equipo2)
+  }
+}
+*/

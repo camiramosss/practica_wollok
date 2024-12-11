@@ -10,7 +10,7 @@ object pepita {
 
 //////////////////////////////////////////////////////PRÁCTICA PARCIAL OBJETOS: WOLLOK//////////////////////////////////////////////////////
 /*
-/////practica "Plataforma de pago" (del pela)
+////////////////////////////////////////////////PRACTICA "Plataforma de pago" (del pela)//////////////////////////////////////
 
 //PUNTO 1
 class Contenido {
@@ -141,7 +141,6 @@ class Alquiler inherits Descarga{
 
 
 //////////////////////////////////////////////////////PRACTICA COMPUTADORAS//////////////////////////////////////////////////////
-
 /*
 //SUPERCOMPUTADORAS
 class Supercomputadora {
@@ -258,7 +257,6 @@ class APruebaDeFallos inherits AhorroDeEnergia{
   }
 }
 */
-
 
 
 //////////////////////////////////////////////////////PRACTICA SUPERHEROES//////////////////////////////////////////////////////
@@ -410,6 +408,7 @@ object humano{
 }
 */
 
+
 ///////////////////////////////////////////////////EJEMPLO INTEGRADOR COLECCIONES////////////////////////////////////////////////////////
 /*
 class Heroe {
@@ -442,17 +441,103 @@ object buscarLaPiedraFilosofal{
 }
 */
 
+
 /////////////////////////////////////////////////////PRACTICA WOLLOK GAME WORLDS////////////////////////////////////////
+/*
+//Jugadores
+object caps{
+  const antiguedad = 9
+  var property cansancio = 0
+  var property habilidad = antiguedad * 2 - cansancio  
+  method puedeJugar () = antiguedad >3 && !(cansancio >= 100)
+  method tomarEnergizante() {cansancio = (cansancio - 10).max(0)}
+
+  method jugar(){cansancio = cansancio + 20}
+}
+
+object faker {
+  var property habilidad = if(!estaTilteado) 100 else 0
+  var property estaTilteado = true
+  method tomarTecito() {estaTilteado = false}
+  method puedeJugar() = !estaTilteado
+
+  method jugar(){habilidad = habilidad + 30}
+}
+
+object josedeodo {
+  const antiguedad = 7
+  var property cansancio = 0
+  var property habilidad = antiguedad * 2 - cansancio
+  method tomarEnergizante() {cansancio = cansancio -10}
+  method puedeJugar () = antiguedad >3 && (cansancio >= 100)
+
+  method jugar(){cansancio = cansancio + 20}
+}
+
+//Equipos
+class Equipo {
+  const jugadores = []
+  method quienesJuegan() = jugadores.filter({jugador => jugador.puedeJugar()})
+  method habilidad() = jugadores.sum({jugador => jugador.habilidad()})
+}
+
+const equipo1 = new Equipo(jugadores = [faker,josedeodo])
+const equipo2 = new Equipo(jugadores = [josedeodo, caps])
+
+//Partidas
+class Partida {
+  const property jugadores = []
+  method comenzarPartida(){
+  jugadores.forEach({jugador => jugador.jugar()})
+  }
+  method ganador() = jugadores.max({jugador => jugador.habilidad()})
+}
+
+const partida1 = new Partida(jugadores = [faker,josedeodo])
+const partida2 = new Partida(jugadores = [equipo1, equipo2])
+*/
 
 
+/////////////////////////////////////////////////////PRACTICA LA POROTA///////////////////////////////////////////////
+/*
+object laPorota {
+  var property stock = 1
+  var property precioPorGramo = 10
 
+  method vender(cantidad, cliente){
+    stock = stock - cantidad
+    cliente.medioDePago().pagar(cantidad * precioPorGramo)
+  }
+}
 
+//Clientes
+class Cliente {
+  var property medioDePago
+}
 
+const cami = new Cliente(medioDePago = tarjetaDeDebito)
+const milito = new Cliente(medioDePago = tarjetaDeCredito)
 
+//Medios de pago
+object tarjetaDeCredito {
+  var property deuda = 0
+  method pagar(monto){
+    deuda = deuda + monto}
+}
 
+object tarjetaDeDebito {
+  var property dineroDisponible = 10000
+  method pagar(monto){
+    if(dineroDisponible < monto) throw new DomainException(message = "Saldo insuficiente")
+    else dineroDisponible = dineroDisponible - monto}
+}
 
-
-
-
-
-
+object cupon{
+  var property seUso = false
+  const property montoMaximo = 1000
+  method pagar(monto) {
+    if(monto>montoMaximo) throw new DomainException(message = "Monto del cupon insuficiente")
+    seUso = true
+  }
+}
+*/
