@@ -372,6 +372,7 @@ object estandar {
 
 //////////////////////////////////////////////////////PRACTICA TIERRA MEDIA//////////////////////////////////////////////////////
 /////////////PRIMERA PARTE
+/*
 object gandalf{
   var property vida = 100
   const armas = [baculo, espadaGlamdring]
@@ -407,6 +408,50 @@ object enano{
 object humano{
   var property valor = 15
 }
+*/
+
+///////////////////////////////////////////////////EJEMPLO INTEGRADOR COLECCIONES////////////////////////////////////////////////////////
+/*
+class Heroe {
+  const nombre
+  const misiones = []
+  method agregarMision(mision) {misiones.add(mision)}
+  method cantidadDeMisiones() = misiones.size()
+  method misionesDificiles() = misiones.filter({mision => mision.esDificil()})
+  method solicitantes() = misiones.map({mision => mision.asignador()})
+  method puntosTotales() = misiones.sum({mision => mision.puntosDeRecompensa()})
+}
+
+//Heroes
+const shrek = new Heroe(nombre = "Shrek")
+const yoshi = new Heroe(nombre = "Yoshi")
+
+//Misiones
+object liberarAFiona{
+ var property trolls = 5
+ method asignador() = "Lord Farquaad"
+ method esDificil() = trolls.between(4,6)
+ method puntosDeRecompensa() = trolls * 2
+}
+
+object buscarLaPiedraFilosofal{
+  var property kms = 2
+  method asignador() = "Dumbledore"
+  method esDificil() = kms >=10
+  method puntosDeRecompensa() = if(kms >50) 10 else 5
+}
+*/
+
+/////////////////////////////////////////////////////PRACTICA WOLLOK GAME WORLDS////////////////////////////////////////
+
+
+
+
+
+
+
+
+
 
 
 
