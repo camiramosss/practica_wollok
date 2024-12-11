@@ -541,3 +541,78 @@ object cupon{
   }
 }
 */
+
+
+////////////////////////////////////////////////////////PRACTICA STREAM WARS///////////////////////////////////////////////////
+//Streams
+
+class Stream {
+  const invitados = []
+  
+  method viewers()
+  method laEstaPegando() = self.nivelDeHype() > 60
+  method nivelDeHype() = invitados.sum({invitado => invitado.popularidad()}).min(100)
+  
+  method costoDeProduccion()
+  method gananciaBase() = self.viewers() * self.nivelDeHype()
+  method ganancias() = self.gananciaBase() - self.costoDeProduccion()
+}
+
+class Sqv inherits Stream {
+  var property canciones
+  override method viewers() = 10000 * canciones
+  override method costoDeProduccion() = 100
+}
+
+class Haa inherits Stream {
+  var property sucesos
+  method haceAnalisisSesudo() = self.realidadInteresante()
+  method realidadInteresante() = sucesos > 10
+  override method viewers() = if(self.haceAnalisisSesudo()) 2000 else 1000
+  override method nivelDeHype() = 100
+  override method costoDeProduccion() = 1000
+}
+
+class SesionIndependiente inherits Stream {
+  var property suscriptores
+  override method viewers() = suscriptores * (1..3).anyOne()
+  override method costoDeProduccion() = self.gananciaBase() - self.gananciaBase() * 1.1
+}
+
+
+//Invitados
+class Invitado {
+  var property seguidores
+  method popularidad () = seguidores / 2
+  method juegaConMascotas(){
+    seguidores = seguidores * 2
+  }
+}
+
+//coscu(????)
+class SesionDeCoscu inherits SesionIndependiente{
+  var property momentoDelDia
+  override method viewers() = super() + momentoDelDia.genteConectada()
+}
+
+//Momentos del dia
+object maniana {
+  method genteConectada() = 1000
+}
+object tarde{
+  method genteConectada() = 5000
+}
+object noche{
+  method genteConectada() = 10000
+}
+
+//object heredado
+object streamX inherits SesionIndependiente (invitados = [], suscriptores = 100){}
+
+///////////////////////////////////////////////////////////////PRACTICA EL NUEVO MIGUELITO///////////////////////////////////////////////////
+
+
+
+
+
+

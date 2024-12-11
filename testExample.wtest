@@ -109,3 +109,23 @@ describe "group of tests for Wollok Game Worlds" {
   }
 }
 */
+
+describe "tests de stream wars" {
+/* no sabemos porque es un numero aleatorio
+test "una sesion de coscu con invitado a mrBeast con 33000000 de seguidores tiene una popularidad de 1420000"{
+  const streamCoscu = new SesionDeCoscu (invitados = [mrBeast], suscriptores = 1000, momentoDelDia = noche)
+  const mrBeast = new Invitado(seguidores = 33000000)
+  assert.equals(streamCoscu.ganancias(), 1420000)
+} */
+
+const cesarMilan = new Invitado(seguidores = 100000)
+const episodio1 = new Sqv(canciones = 4, invitados = [cesarMilan])
+
+test "un SQV con 4 canciones, con un invitado con 1000000 seguidores que juega con mascotas va a tener 4000 viewers"{
+  assert.equals(episodio1.viewers(), 40000)
+}
+
+test "un SQV con 4 canciones, con un invitado con 1000000 seguidores que juega con mascotas va a tener un nivel de hype = "{
+  assert.equals(episodio1.nivelDeHype(), 100)
+}
+}
