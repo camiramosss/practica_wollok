@@ -544,8 +544,8 @@ object cupon{
 
 
 ////////////////////////////////////////////////////////PRACTICA STREAM WARS///////////////////////////////////////////////////
+/*
 //Streams
-
 class Stream {
   const invitados = []
   
@@ -608,11 +608,132 @@ object noche{
 
 //object heredado
 object streamX inherits SesionIndependiente (invitados = [], suscriptores = 100){}
+*/
+
 
 ///////////////////////////////////////////////////////////////PRACTICA EL NUEVO MIGUELITO///////////////////////////////////////////////////
+//Platos
+class Plato{
+  method esAptoCeliacos()
+  method valoracion()
+  method esEspecial() = self.peso() > 250
+  method precio() = self.valoracion()
+  method peso()
+}
 
+class Provoleta inherits Plato{
+  var property empanado
+  override method esAptoCeliacos() = empanado
+  override method esEspecial() = super() && empanado
+  override method valoracion() = if(self.esEspecial()) 120 else 80
+}
 
+class Hamburguesa inherits Plato{
+  var property pesoMedallon
+  var property tipoDePan
+  override method peso() = pesoMedallon + tipoDePan.pesoTipoDePan()
+  override method esAptoCeliacos() = tipoDePan.panAptoCeliacos()
+  override method valoracion() = self.peso() / 10
+}
 
+class HamburguesaDoble inherits Hamburguesa{
+  override method peso() = super() * 2
+  override method esEspecial() = self.peso() > 500
+}
 
+class CorteDeCarne inherits Plato{
+  var property peso
+  var property tipoCorte
+  var property estaAPunto
+  override method esEspecial() = super() && estaAPunto
+  override method esAptoCeliacos() = true
+  override method valoracion() = 100
+}
 
+class Parrillada inherits Plato{
+  const property platos = []
+  override method peso() = platos.sum({plato => plato.peso()})
+  override method esEspecial() = super() && platos.size() >= 3
+  override method esAptoCeliacos() = platos.all({plato => plato.esAptoCeliacos()})
+  override method valoracion() = platos.max({plato => plato.valoracion()}).valoracion()   //la valoracion del plato con mayor valoracion, si no agregamos .valoracion() al final, nos devuelve el plato, no el numero
+}
 
+//Tipos de panes (para las hamburguesas)
+object industrial{
+  method panAptoCeliacos() = false
+  method pesoTipoDePan() = 60
+}
+object casero{
+  method panAptoCeliacos() = false
+  method pesoTipoDePan() = 100
+}
+object maiz{
+  method panAptoCeliacos() = true
+  method pesoTipoDePan() = 30
+}
+
+//Parrilla El Miguelito
+object elMiguelito{
+  const menu = [asado1]
+  const comensales = []
+  method agregarPlatoAMenu(plato){menu.add(plato)}
+  method platosAccesiblesCon(dinero) = menu.filter({plato => plato.precio() <= dinero})
+  method hacerPromocion(dinero){
+    comensales.forEach({comensal => comensal.recibirDinero(dinero)})  
+  }
+}
+
+//Comensales
+class Comensal{
+  var property tipoComensal
+  const property platosComprados = []
+  var property dineroDisponible
+ 
+  method seQuiereDarUnGusto() {
+    if(self.platosQuePuedeComprar().isEmpty()){
+       throw new DomainException(message = "no alcanza para ningun plato")}
+    self.comprarPlato(self.platoElegido())
+  }
+ 
+  method platosQuePuedeComprar() = elMiguelito.platosAccesiblesCon(dineroDisponible).filter({plato => tipoComensal.leAgradaLaComida(plato)})
+  method platoElegido() = self.platosQuePuedeComprar().max({plato => plato.valoracion()})
+  
+  method comprarPlato(plato){
+    platosComprados.add(plato)
+    dineroDisponible = dineroDisponible - plato.precio()
+  }
+
+  method recibirDinero(dinero){
+    if(!platosComprados.isEmpty()){dineroDisponible = dineroDisponible + dinero}
+  }
+
+  method problemasGastricos(){
+    self.cambiarTipoDelComensal(personaCeliaca)
+  }
+  method cambiarTipoDelComensal(nuevoTipo){
+    tipoComensal = nuevoTipo
+  }
+
+  method volverseTodoTerreno(){
+    self.cambiarTipoDelComensal(personaTodoTerreno)
+  }
+
+  method volversePaladarfino(){
+    self.cambiarTipoDelComensal(personaDePaladarFino)
+  }
+}
+
+object personaCeliaca{
+  method leAgradaLaComida(comida) = comida.esAptoCeliacos()
+}
+
+object personaDePaladarFino{
+  method leAgradaLaComida(comida) = comida.esEspecial() || comida.valoracion() > 100
+}
+
+object personaTodoTerreno{
+  method leAgradaLaComida(comida) = true
+}
+
+const joaquin = new Comensal(tipoComensal= personaTodoTerreno, platosComprados = [asado1], dineroDisponible = 100000)
+const asado1 = new CorteDeCarne(peso = 300, tipoCorte = "asado", estaAPunto = true)

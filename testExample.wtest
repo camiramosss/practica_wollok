@@ -110,6 +110,7 @@ describe "group of tests for Wollok Game Worlds" {
 }
 */
 
+/*
 describe "tests de stream wars" {
 /* no sabemos porque es un numero aleatorio
 test "una sesion de coscu con invitado a mrBeast con 33000000 de seguidores tiene una popularidad de 1420000"{
@@ -117,7 +118,7 @@ test "una sesion de coscu con invitado a mrBeast con 33000000 de seguidores tien
   const mrBeast = new Invitado(seguidores = 33000000)
   assert.equals(streamCoscu.ganancias(), 1420000)
 } */
-
+/*
 const cesarMilan = new Invitado(seguidores = 100000)
 const episodio1 = new Sqv(canciones = 4, invitados = [cesarMilan])
 
@@ -127,5 +128,32 @@ test "un SQV con 4 canciones, con un invitado con 1000000 seguidores que juega c
 
 test "un SQV con 4 canciones, con un invitado con 1000000 seguidores que juega con mascotas va a tener un nivel de hype = "{
   assert.equals(episodio1.nivelDeHype(), 100)
+}
+}
+*/
+
+describe "tests de parrilla miguelito" {
+const hamburguesa1 = new Hamburguesa(pesoMedallon = 90, tipoDePan = industrial)
+const asado1 = new CorteDeCarne(peso = 300, tipoCorte = "asado", estaAPunto = true)
+const parrillada1 = new Parrillada(platos = [hamburguesa1, asado1])
+const joaquinsinho = new Comensal(tipoComensal= personaTodoTerreno, platosComprados = [asado1], dineroDisponible = 100000)
+const milito = new Comensal(tipoComensal = personaTodoTerreno, platosComprados =[], dineroDisponible = 5)
+method initialize(){elMiguelito.agregarPlatoAMenu(asado1)}
+
+test "la parrillada no es apta para celiacos"{
+  assert.notThat(parrillada1.esAptoCeliacos())
+}
+
+test "el peso de la parrillada1 es 450"{
+  assert.equals(parrillada1.peso(), 450)
+}
+
+test"joaquinsinho se da un gusto"{
+  joaquinsinho.seQuiereDarUnGusto()
+  assert.that(joaquinsinho.dineroDisponible() > 0)
+}
+
+test"milito no se puede dar un gusto"{
+	assert.throwsExceptionWithMessage("no alcanza para ningun plato", {milito.seQuiereDarUnGusto()})
 }
 }
