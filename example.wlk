@@ -674,7 +674,7 @@ object maiz{
 
 //Parrilla El Miguelito
 object elMiguelito{
-  const menu = [asado1]
+  const menu = []
   const comensales = []
   method agregarPlatoAMenu(plato){menu.add(plato)}
   method platosAccesiblesCon(dinero) = menu.filter({plato => plato.precio() <= dinero})
@@ -735,5 +735,40 @@ object personaTodoTerreno{
   method leAgradaLaComida(comida) = true
 }
 
-const joaquin = new Comensal(tipoComensal= personaTodoTerreno, platosComprados = [asado1], dineroDisponible = 100000)
-const asado1 = new CorteDeCarne(peso = 300, tipoCorte = "asado", estaAPunto = true)
+
+///////////////////////////////////////////////////////////////PARCIAL BRAWL/////////////////////////////////////////////////////////////
+//Personajes
+class Personaje{
+  var property copas
+  method destreza()
+  method estrategia()
+}
+
+class Arquero inherits Personaje{
+  var property agilidad
+  var property rango 
+  override method destreza() = agilidad * rango
+  override method estrategia() = rango > 100
+}
+
+class Guerrera inherits Personaje{
+  var property fuerza 
+  override method destreza() = fuerza * 1.5
+}
+
+class Ballestero inherits Arquero{
+  override method destreza() = super() * 2
+}
+
+//Misiones
+class MisionIndividual{
+  var property dificultad
+  method copasEnJuego() = dificultad * 2
+  method puedeSerSuperada(jugador) =  jugador.estrategia() || jugador.destreza() > dificultad
+}
+
+class MisionPorEquipo{
+  const property jugadores
+  method copasEnJuego() = 50 / jugadores.size()
+  method puedeSerSuperada() = jugadores
+}
