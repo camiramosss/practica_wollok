@@ -131,7 +131,7 @@ test "un SQV con 4 canciones, con un invitado con 1000000 seguidores que juega c
 }
 }
 */
-
+/*
 describe "tests de parrilla miguelito" {
 const hamburguesa1 = new Hamburguesa(pesoMedallon = 90, tipoDePan = industrial)
 const asado1 = new CorteDeCarne(peso = 300, tipoCorte = "asado", estaAPunto = true)
@@ -157,3 +157,29 @@ test"milito no se puede dar un gusto"{
 	assert.throwsExceptionWithMessage("no alcanza para ningun plato", {milito.seQuiereDarUnGusto()})
 }
 }
+*/
+
+describe "tests de pdep brawls"{
+  const palomita = new Arquero(copas = 15, agilidad = 100, rango = 4000)
+  const joaquinsinho = new Ballestero(copas = 15, agilidad = 80, rango = 1000)
+  const milito = new Guerrero(copas = 15, fuerza = 990)
+  const pupi = new Guerrero(copas = 50, fuerza = 800)
+  const noob = new Guerrero(copas = 8,fuerza = 100)
+
+  const misionDePaloma = new MisionIndividual(tipoMision = normal, personaje = palomita, dificultad = 8)
+  const misionEntreTodos = new MisionPorEquipo(tipoMision = normal, jugadores = [palomita,joaquinsinho,milito,pupi])
+  const misionDeNoob = new MisionIndividual(tipoMision = normal, personaje = noob, dificultad = 10)
+
+test "una mision individual fue superada"{
+   assert.that(misionDePaloma.puedeSerSuperada())
+}
+
+test "una mision grupal fue superada"{
+  assert.that(misionEntreTodos.puedeSerSuperada())
+}
+
+test "un jugador con -10 copas no puede superar una mision :("{
+  assert.throwsExceptionWithMessage("La mision no puede comenzar", {misionDeNoob.repartirCopas()})
+}
+}
+

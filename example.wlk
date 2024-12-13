@@ -612,6 +612,7 @@ object streamX inherits SesionIndependiente (invitados = [], suscriptores = 100)
 
 
 ///////////////////////////////////////////////////////////////PRACTICA EL NUEVO MIGUELITO///////////////////////////////////////////////////
+/*
 //Platos
 class Plato{
   method esAptoCeliacos()
@@ -734,14 +735,22 @@ object personaDePaladarFino{
 object personaTodoTerreno{
   method leAgradaLaComida(comida) = true
 }
-
+*/
 
 ///////////////////////////////////////////////////////////////PARCIAL BRAWL/////////////////////////////////////////////////////////////
 //Personajes
 class Personaje{
   var property copas
   method destreza()
-  method estrategia()
+  method estrategia() = true
+
+  method recibirCopas(n) {
+    copas = copas + n
+  }
+
+  method restarCopas(n){
+    copas = copas - n
+  }
 }
 
 class Arquero inherits Personaje{
@@ -751,7 +760,7 @@ class Arquero inherits Personaje{
   override method estrategia() = rango > 100
 }
 
-class Guerrera inherits Personaje{
+class Guerrero inherits Personaje{
   var property fuerza 
   override method destreza() = fuerza * 1.5
 }
@@ -761,14 +770,60 @@ class Ballestero inherits Arquero{
 }
 
 //Misiones
-class MisionIndividual{
-  var property dificultad
-  method copasEnJuego() = dificultad * 2
-  method puedeSerSuperada(jugador) =  jugador.estrategia() || jugador.destreza() > dificultad
+class Mision{
+  var property tipoMision
+  method copasEnJuego()
+  method repartirCopas()
+  method puedeSerSuperada()
 }
 
-class MisionPorEquipo{
+class MisionIndividual inherits Mision{
+  var property personaje
+  var property dificultad
+  override method copasEnJuego() = dificultad * 2
+  override method puedeSerSuperada() =  personaje.estrategia() || personaje.destreza() > dificultad
+  
+  override method repartirCopas(){
+    if(personaje.copas() < 10) throw new DomainException (message = "La mision no puede comenzar")
+    if (self.puedeSerSuperada()){
+      personaje.recibirCopas(tipoMision.copasSegunMision(self))
+    } else {
+      personaje.restarCopas(tipoMision.copasSegunMision(self))
+    }
+  }
+
+  method sumarCopaPorCadaParticipante() = self.copasEnJuego() + 1
+}
+
+class MisionPorEquipo inherits Mision{
   const property jugadores
-  method copasEnJuego() = 50 / jugadores.size()
-  method puedeSerSuperada() = jugadores
+  override method copasEnJuego() = 50 / jugadores.size()
+  override method puedeSerSuperada() = self.masDeLaMitadTieneEstrategia() || self.cadaUnoTieneDestrezaMayorA(400)
+  method masDeLaMitadTieneEstrategia() = jugadores.count({jugador => jugador.estrategia()}) >= jugadores.size() / 2
+  method cadaUnoTieneDestrezaMayorA(numero) = jugadores.all({jugador => jugador.destreza() > numero})
+  
+  method copasMenorA60() = jugadores.sum({jugador => jugador.copas()}) < 60
+  override method repartirCopas(){
+    if(self.copasMenorA60()) throw new DomainException(message = "La mision no puede comenzar")
+    if(self.puedeSerSuperada()){
+      jugadores.forEach({jugador => jugador.recibirCopas(tipoMision.copasSegunMision(self))})
+    } else {
+      jugadores.forEach({jugador => jugador.restarCopas(tipoMision.copasSegunMision(self))})
+    }
+  }
+  method sumarCopaPorCadaParticipante() = self.copasEnJuego() + jugadores.size()
+}
+
+//tipo misiones
+object misionBoost{
+  var property multiplicador = 1
+  method copasSegunMision(mision) = mision.copasEnJuego() * multiplicador
+}
+
+object misionBonus{
+  method copasSegunMision(mision) = mision.sumarCopaPorCadaParticipante()
+}
+
+object normal{
+  method copasSegunMision(mision) = mision.copasEnJuego()
 }
