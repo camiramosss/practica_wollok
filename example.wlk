@@ -738,6 +738,7 @@ object personaTodoTerreno{
 */
 
 ///////////////////////////////////////////////////////////////PARCIAL BRAWL/////////////////////////////////////////////////////////////
+/*
 //Personajes
 class Personaje{
   var property copas
@@ -826,4 +827,179 @@ object misionBonus{
 
 object normal{
   method copasSegunMision(mision) = mision.copasEnJuego()
+}
+*/
+
+
+/////////////////////////////////////////////////////////////PARCIAL DANGER ZONE/////////////////////////////////////////////////////////
+/*
+//Empleados
+class Empleado{
+  var property tipoEmpleado
+  var property salud
+  const habilidades
+  method saludCritica() = tipoEmpleado.saludCritica()
+
+  method estaIncapacitado() = salud < self.saludCritica()
+  method puedeUsarHabilidad(habilidad) = !self.estaIncapacitado() && habilidades.contains(habilidad)
+
+  method sobreviveAMision(mision) = mision.habilidades().all({habilidad => self.puedeUsarHabilidad(habilidad)})
+
+  method realizarMision(mision){
+    if(!self.sobreviveAMision(mision)) throw new DomainException(message = "No sobrevive a la mision")
+    self.recibirDanio(mision.peligrosidad())
+  }
+
+  method finalizarMision(mision){
+    if(self.salud() > 0) tipoEmpleado.completaMision(mision,self)
+  }
+
+  method recibirDanio(n){
+    salud = salud - n
+  }
+
+  method habilidadesQueNoPoseeaDeUna(mision) = mision.habilidades().filter({habilidad => self.noPoseeHabilidad(habilidad)})
+  method noPoseeHabilidad(habilidad) = !habilidades.contains(habilidad)
+}
+
+class Jefe inherits Empleado{ //hacemos herencia con el jefe ya que este no va a cambiar con el tiempo y ES UN EMPLEADO
+  const property subordinados = [] 
+  method algunSubordinadoLaTiene(habilidad) = subordinados.any({subordinado => subordinado.puedeUsarHabilidad(habilidad)})
+  override method puedeUsarHabilidad(habilidad) = super(habilidad) && self.algunSubordinadoLaTiene(habilidad)
+}
+
+//tipos de empleado (los hacemos como objects ya que en un futuro, podran cambiar de puesto)
+object puestoEspia{
+  method saludCritica() = 15
+  method completaMision(mision,empleado){
+   empleado.habilidades().add(empleado.habilidadesQueNoPoseeaDeUna(mision))
+  }
+}
+
+class PuestoOficinista{ //hacemos una class porque tiene un estado interno, cada oficinista tiene una cantidad distinta de estrellas
+  var property estrellas
+  method saludCritica() = 40 - 5 * estrellas
+  method completarMision(mision,empleado){
+    estrellas = estrellas + 1
+    if(estrellas >= 3) empleado.puesto(puestoEspia)
+  }
+}
+
+//Equipos
+class Equipo{
+  const property empleados = []
+  method sobreviveAMision(mision) = empleados.any({empleado => empleado.sobreviveAMision(mision)})
+
+  method realizarMision(mision){
+    if(!self.sobreviveAMision(mision)) throw new DomainException(message = "No sobrevive a la mision")
+    self.recibirDanio(mision.peligrosidad() / 3)
+  }
+
+  method recibirDanio(n){
+     empleados.forEach({empleado => empleado.recibirDanio(n)})
+  }
+}
+
+//Misiones
+class Mision{
+  var property peligrosidad
+  const property habilidades = []
+}
+*/
+
+
+/////////////////////////////////////////////////////////////PARCIAL 21/11 GRIM FANDALGO////////////////////////////////////////////////////
+object departamentoDeLaMuerte{
+  const property paquetesPredefinidos = []
+  const agentes = []
+  method mejorAgente() = agentes.max({agente => agente.cantidadPaquetesVendidos()})
+  method diaDeLosMuertos() {
+    self.mejorAgente().reducirDeudaEn(50)
+    self.liberarAgentes()
+    agentes.forEach({agente => agente.aumentarDeuda()})
+  }
+
+  method agentesQuePagaronSuDeuda() = agentes.filter({agente => agente.deudaActual() == 0})
+  method liberarAgentes(){
+    agentes.removeAll(self.agentesQuePagaronSuDeuda())
+  }
+}
+
+
+class Agente{
+  const property paquetesVendidos = [] 
+  var property deudaInicial
+  var property estrategiaDeVenta 
+  method deudaActual() = deudaInicial - self.dineroTotal()
+  method dineroTotal() = paquetesVendidos.sum({paquete => paquete.costo()})
+  method cantidadPaquetesVendidos() = paquetesVendidos.size()
+  method hacerVenta(paquete,alma){
+    if(!alma.puedeCostear(paquete)) throw new DomainException(message = "u don`t have enough money")
+    paquetesVendidos.add(paquete)
+  }
+  method reducirDeudaEn(n){
+    deudaInicial = deudaInicial - 50
+  }
+  method aumentarDeuda(n){
+    deudaInicial = deudaInicial + n
+  }
+
+  method atenderAlma(alma){
+    self.hacerVenta(estrategiaDeVenta.paquetePara(alma), alma)
+  }
+  }
+
+class Alma { 
+  var property dineroAlMorir
+  var property accionesBuenas
+  const property tiempoDeviajeInicial
+  method tiempoDeViaje()
+
+  method capitalAlma() = dineroAlMorir * accionesBuenas
+  method puedeCostear(paquete) = self.capitalAlma() >= paquete.costo()
+
+}
+
+class Venta{
+  const property agente
+  const property alma
+}
+
+//Paquetes
+class Paquete{
+  var property costoBase
+  method cuantoReduceA(alma)
+  method costoSegun(alma) = costoBase * self.cuantoReduceA(alma)
+}
+
+class Tren inherits Paquete{
+  override method cuantoReduceA(alma) = 4
+}
+
+class Bote inherits Paquete{
+  override method cuantoReduceA(alma) = (alma.accionesBuenas() / 50).min(2)
+}
+
+class Crucero inherits Bote{
+  override method cuantoReduceA(alma) = super(alma) * 2
+}
+
+class Palo inherits Paquete{
+  override method cuantoReduceA(alma) = 0.05
+  override method costoSegun(alma) = costoBase
+}
+
+//estrategias de venta
+object clasico{
+  method paquetePara(alma) = self.paquetesCosteables(alma).max({paquete => paquete.costoSegun(alma)})
+  method paquetesCosteables(alma) = departamentoDeLaMuerte.paquetesPredefinidos().filter({paquete => alma.puedeCostear(paquete)})
+}
+
+object navegante{
+  method paquetePara(alma) = if(alma.accionesBuenas() > 50) new Crucero(costoBase = alma.accionesBuenas())
+                             else new Bote(costoBase = alma.accionesBuenas())
+}
+
+object indiferente{
+  method paquetePara(alma) = new Palo(costoBase = 1.randomUpTo(300))
 }
